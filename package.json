@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-lab",
+  "version": "0.0.1",
+  "description": "Node.js lab",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "redis": "^2.6.2",
+    "response-time": "^2.3.1",
+    "randomstring": "^1.1.5"
+  },
+  "engine": {
+    "node": "*",
+    "npm": "*"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/jwennerberg/nodejs-lab.git"
+  },
+  "homepage": "http://github.com/jwennerberg/nodejs-lab"
+}
