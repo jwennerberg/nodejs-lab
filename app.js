@@ -5,7 +5,7 @@ var redis = require('redis');
 var randomstring = require("randomstring");
 //var axios = require('axios');
 
-var redis_port = (process.env.REDIS_PORT || 5000);
+var redis_port = (process.env.REDIS_PORT || 6379);
 var redis_host = (process.env.REDIS_HOST || "redis");
 
 // create a new redis client and connect to our local redis instance
