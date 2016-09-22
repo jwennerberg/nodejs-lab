@@ -4,8 +4,8 @@ var responseTime = require('response-time')
 var redis = require('redis');
 var randomstring = require("randomstring");
 
-var redis_port = (process.env.REDIS_PORT || 6379);
-var redis_host = (process.env.REDIS_HOST || "redis");
+var redis_port = (process.env.REDIS_INSTANCE_PORT || 6379);
+var redis_host = (process.env.REDIS_INSTANCE_HOST || "redis");
 
 // create a new redis client and connect to our local redis instance
 var client = redis.createClient(redis_port, redis_host);
