@@ -1,7 +1,7 @@
 // require the dependencies we installed
 var app = require('express')();
-var responseTime = require('response-time')
 var redis = require('redis');
+var responseTime = require('response-time')
 var randomstring = require("randomstring");
 
 var redis_port = (process.env.REDIS_INSTANCE_PORT || 6379);
@@ -27,8 +27,9 @@ app.get('/api/:nodekey', function(req, res) {
         // the result exists in our cache - return it to our user immediately
         res.send({ "value": result, "source": "redis cache" });
       } else {
-        client.setex(nodekey, randomstring.generate(), genValue);
-        res.send({ "value": genValue, "source": "Generated" });
+        var nodeval = randomstring.generate();
+        client.set(nodekey, nodeval, redis.print);
+        res.send({ "value": nodeval, "source": "Generated" });
       }
   });
 });
