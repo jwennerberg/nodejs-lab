@@ -19,7 +19,7 @@ node ("nodejs") {
   sh "npm test"
 
   stage "Destroy redis"
-  openshiftDeleteResourceByKey(types: "svc,dc,is", keys: "${redis_name}", namespace: "${ocp_namespace}")
+  openshiftDeleteResourceByLabels(types: "svc,rc,dc,is,pod", keys: "app", values: "${redis_name}", namespace: "${ocp_namespace}")
 
 /*
   stage "Build"
