@@ -11,14 +11,15 @@ node ("nodejs") {
 
   stage "Deploy redis"
   sh "oc project ${ocp_namespace}"
-  sh "oc new-app --template=redis -p REDIS_SERVICE_NAME=${redis_name}"
+//  sh "oc new-app --template=redis -p REDIS_SERVICE_NAME=${redis_name}"
+  sh "oc process openshift//redis -v REDIS_SERVICE_NAME=${redis_name} | oc create -n ${ocp_namespace} -f -"
   openshiftVerifyService(serviceName: "${redis_name}", namespace: "${ocp_namespace}")
 
   stage "Test"
   sh "npm test"
 
   stage "Destroy redis"
-  openshiftDeleteResourceByKey(types: "svc,dc,is", key: "${redis_name}", namespace: "${ocp_namespace}")
+  openshiftDeleteResourceByKey(types: "svc,dc,is", keys: "${redis_name}", namespace: "${ocp_namespace}")
 
 /*
   stage "Build"
