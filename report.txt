@@ -1,0 +1,2 @@
+serverUrl=http://nodejs-lab-s2i.apps.wnn.se/api/foo
+actId=34sefxz
