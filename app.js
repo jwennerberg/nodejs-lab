@@ -1,39 +1,38 @@
-// require the dependencies we installed
-var app = require('express')();
-var redis = require('redis');
-var responseTime = require('response-time')
-var randomstring = require("randomstring");
+var http = require('http');
 
-var redis_port = (process.env.REDIS_INSTANCE_PORT || 6379);
-var redis_host = (process.env.REDIS_INSTANCE_HOST || "redis");
+var LISTEN_ON_PORT = 3000;
 
-// create a new redis client and connect to our local redis instance
-var client = redis.createClient(redis_port, redis_host);
+function toTitleCase(str) {
+    return str.replace(/[a-z]*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
-// if an error occurs, print it to the console
-client.on('error', function (err) {
-    console.log("Error " + err);
-});
+http.createServer(function (req, res) {
+    var body;
 
-app.set('port', (process.env.PORT || 5000));
-// set up the response-time middleware
-app.use(responseTime());
+    body = '';
+    req.on('data', function(chunk) {
+        body += chunk;
+    });
 
-app.get('/api/:nodekey', function(req, res) {
-  var nodekey = req.params.nodekey;
+    req.on('end', function() {
+        console.log(req.method + ' ' + req.url + ' HTTP/' + req.httpVersion);
 
-  client.get(nodekey, function(error, result) {
-      if (result) {
-        // the result exists in our cache - return it to our user immediately
-        res.send({ "value": result, "source": "redis cache" });
-      } else {
-        var nodeval = randomstring.generate();
-        client.set(nodekey, nodeval, redis.print);
-        res.send({ "value": nodeval, "source": "Generated" });
-      }
-  });
-});
+        for (prop in req.headers) {
+            console.log(toTitleCase(prop) + ': ' + req.headers[prop]);
+        }
 
-app.listen(app.get('port'), function(){
-  console.log('Server listening on port: ', app.get('port'));
+        if (body.length > 0) {
+            console.log('\n' + body);
+        }
+        console.log('');
+
+        res.writeHead(200);
+        res.end();
+    });
+
+    req.on('err', function(err) {
+        console.error(err);
+    });
+}).listen(LISTEN_ON_PORT, function () {
+    console.log('Server listening on port ' + LISTEN_ON_PORT);
 });
